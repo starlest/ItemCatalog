@@ -11,8 +11,10 @@
 
     <body>
         <div class="container">
+
             <div class="row">
                 <nav class="col-md-12 navbar navbar-default">
+
                     <div class="navbar-header"><a
                             class="navbar-brand navbar-link glyphicon glyphicon-home"
                             href="/catalog"></a>
@@ -27,21 +29,32 @@
                             <span class="icon-bar"></span>
                         </button>
                     </div>
+
                     <div class="collapse navbar-collapse" id="navcol-1">
                         <ul class="nav navbar-nav navbar-right">
+
+                            {% if not current_logged_in_username %}
                             <li>
-                                {% if not current_logged_in_username %}
                                 <a href="/login"><span
                                         class="glyphicon glyphicon-log-in"></span>
                                     Login</a>
-                                {% else %}
+                            </li>
+                            {% else %}
+                            <li>
+                                <a href="#"><span
+                                        class="glyphicon glyphicon-plus"></span>
+                                    Add Item</a>
+                            </li>
+                            <li>
                                 <a href="/logout"><span
                                         class="glyphicon glyphicon-log-out"></span>
                                     Logout</a>
-                                {% endif %}
                             </li>
+                            {% endif %}
+
                         </ul>
                     </div>
+
                 </nav>
             </div>
         </div>
