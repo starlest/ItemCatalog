@@ -1,0 +1,16 @@
+body {
+    background-color: gray;
+}
+
+.content {
+    background-color: white;
+}
+
+.catalog {
+    background-color: lightblue;
+}
+
+.catalog h2, .content h2 {
+    margin-top: 0;
+    padding-top: 20px;
+}
