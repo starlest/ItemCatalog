@@ -3,9 +3,9 @@
 {% block content %}
 <div class="row content">
 
-    <div class="col-sm-3 catalog">
+    <div class="col-sm-3 categories">
         <h2>Categories</h2>
-        <ul class="categories list-unstyled">
+        <ul class="list-unstyled">
             {% for category in categories %}
             <li>
                 <a
@@ -16,9 +16,9 @@
         </ul>
     </div>
 
-    <div class="col-sm-9">
+    <div class="col-sm-9 latest-items">
+        <button class="btn btn-primary btn-sm">Add Item</button>
         <h2>Latest Items</h2>
-        <a class="add-item-link" href="#">Add Item</a>
         <ul class="items-list list-unstyled">
             {% for item in latest_items %}
             <li>
@@ -28,6 +28,5 @@
             {% endfor %}
         </ul>
     </div>
-
 </div>
 {% endblock %}

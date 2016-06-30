@@ -1,4 +1,61 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h3>Select Login Method</h3>
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-md-6" id="signInButton">
+        <span class="g-signin"
+              data-scope="openid email"
+              data-clientid="804200063011-3bqth7dehs5ioj81nbv8h4ptv1redl30.apps.googleusercontent.com"
+              data-redirecturi="postmessage"
+              data-accesstype="offline"
+              data-cookiepolicy="single_host_origin"
+              data-callback="signInCallback"
+              data-approvalprompt="force">
+        </span>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-12" id="result"></div>
+</div>
+
+<script>
+    function signInCallback(authResult) {
+        if (authResult['code']) {
+            // Hide the sign-in button now that the user is authorized
+            $('#signInButton').attr('style', 'display: none');
+            // Send the one-time-use code to the server, if the server responds, write a 'login successful' message to the web page and then redirect back to the main restaurants page
+            $.ajax({
+                type: 'POST',
+                url: '/login/google?state={{STATE}}',
+                processData: false,
+                data: authResult['code'],
+                contentType: 'application/octet-stream; charset=utf-8',
+                success: function (result) {
+                    // Handle or verify the server response if necessary.
+                    if (result) {
+                        $('#result').html('Login Successful!</br>' + result +
+                        '</br>Redirecting...')
+                        setTimeout(function () {
+                            window.location.href = "/catalog";
+                        }, 4000);
+
+                    } else if (authResult['error']) {
+                        console.log('There was an error: ' + authResult['error']);
+                    } else {
+                        $('#result').html('Failed to make a server-side call. Check your configuration and console.');
+                    }
+                }
+            });
+        }
+    }
+</script>
 {% endblock %}

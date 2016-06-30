@@ -1,0 +1,21 @@
+body {
+    background-color: gray;
+}
+
+#navcol-1 {
+
+}
+
+.content {
+    background-color: white;
+}
+
+.categories, .latest-items {
+    margin-top: 0;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.categories {
+    background-color: lightblue;
+}
