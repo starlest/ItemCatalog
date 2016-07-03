@@ -223,7 +223,7 @@ def showCatalog():
                            current_logged_in_user_id=current_logged_in_user_id)
 
 
-@app.route('/item/new/', methods=['GET', 'POST'])
+@app.route('/catalog/item/new/', methods=['GET', 'POST'])
 def newItem():
     """
     Handles the creation of new item
@@ -244,6 +244,37 @@ def newItem():
         categories = session.query(Category).all()
         return render_template('newitem.html', categories=categories,
                                current_logged_in_user_id=current_logged_in_user_id)
+
+
+@app.route("/catalog/item/<int:item_id>/edit", methods=['GET', 'POST'])
+def editItem(item_id):
+    """
+    Handles the editing of an item
+    """
+    if 'username' not in login_session:
+        return redirect('/login')
+
+    current_logged_in_user_id = getUserID(login_session.get('email'))
+    edit_item = session.query(Item).filter_by(id=item_id).first()
+
+    if edit_item.user_id != current_logged_in_user_id:
+        flash('You are not authorised to perform this action!')
+        return
+
+    if request.method == 'POST':
+        edit_item.name = request.form['name']
+        edit_item.description = request.form['description']
+        edit_item.category_id = request.form['category_id']
+        session.add(edit_item)
+        session.commit()
+        flash('Item %s Successfully Edited' % edit_item.name)
+        session.commit()
+        return redirect(url_for('showCatalog'))
+    else:
+        categories = session.query(Category).all()
+        return render_template('edititem.html', categories=categories,
+                               current_logged_in_user_id=current_logged_in_user_id,
+                               item=edit_item)
 
 
 @app.route('/catalog/<int:category_id>/items')

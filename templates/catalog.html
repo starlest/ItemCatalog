@@ -17,6 +17,19 @@
         </div>
 
         <div class="col-xs-12 col-sm-9 latest-items">
+            <div class='row flash'>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+
+                <ul>
+                    {% for message in messages %}
+                    <li><strong> {{ message }} </strong></li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% endwith %}
+            </div>
+
             <h2>Latest Items</h2>
             <ul class="items-list list-unstyled">
                 {% for item in latest_items %}
@@ -24,6 +37,9 @@
                     <a href="{{url_for('showItem', item_id=item.id)}}">
                         {{item.name}}</a>
                     {% if item.user_id == current_logged_in_user_id %}
+                    <a class="btn btn-sm btn-default"
+                       href="{{url_for('editItem', item_id=item.id)}}">Edit
+                    </a>
                     <a class="btn btn-sm btn-default"
                        href="/catalog">Delete
                     </a>

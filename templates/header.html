@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand navbar-link glyphicon glyphicon-home"
-               href="/catalog">
+               href="/">
             </a>
             <button class="navbar-toggle"
                     data-toggle="collapse"
@@ -21,18 +21,18 @@
 
             {% if not current_logged_in_user_id %}
             <li>
-                <a href="/login"><span
+                <a href="{{url_for('showLogin')}}"><span
                         class="glyphicon glyphicon-log-in"></span>
                     Login</a>
             </li>
             {% else %}
             <li>
-                <a href="/item/new"><span
+                <a href="{{url_for('newItem')}}"><span
                         class="glyphicon glyphicon-plus"></span>
                     Add Item</a>
             </li>
             <li>
-                <a href="/logout"><span
+                <a href="{{url_for('logout')}}"><span
                         class="glyphicon glyphicon-log-out"></span>
                     Logout</a>
             </li>
