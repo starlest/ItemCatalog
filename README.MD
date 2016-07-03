@@ -1,5 +1,5 @@
-# TournamentDatabase
-Project 4 of Udacity's Full Stack Web Developer Nanodegree Program
+# Item Catalog
+Project 5 of Udacity's Full Stack Web Developer Nanodegree Program
 
 # Requirements
 1) [Git](http://git-scm.com/downloads).  
