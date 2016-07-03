@@ -4,7 +4,7 @@ import string
 import httplib2
 import requests
 from flask import Flask, render_template, request, make_response, flash, \
-    redirect, url_for
+    redirect, url_for, jsonify
 from flask import session as login_session
 from oauth2client.client import FlowExchangeError
 from oauth2client.client import flow_from_clientsecrets
@@ -24,6 +24,12 @@ Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
+
+# API Endpoint for Item
+@app.route("/catalog/item/<int:item_id>/JSON")
+def itemJSON(item_id):
+    item = session.query(Item).filter_by(id=item_id).one()
+    return jsonify(item.serialize)
 
 
 @app.route('/login')

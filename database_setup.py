@@ -61,7 +61,7 @@ class Item(Base):
         return {
             'name': self.name,
             'id': self.id,
-            'created_at': self.created_at
+            'description': self.description
         }
 
 

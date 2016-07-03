@@ -36,6 +36,7 @@
                 <li>
                     <a href="{{url_for('showItem', item_id=item.id)}}">
                         {{item.name}}</a>
+                    <i>({{item.category.name}})</i>
                     {% if item.user_id == current_logged_in_user_id %}
                     <a class="btn btn-sm btn-default"
                        href="{{url_for('editItem', item_id=item.id)}}">Edit
