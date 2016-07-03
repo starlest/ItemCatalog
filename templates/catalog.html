@@ -41,7 +41,7 @@
                        href="{{url_for('editItem', item_id=item.id)}}">Edit
                     </a>
                     <a class="btn btn-sm btn-default"
-                       href="/catalog">Delete
+                       href="{{url_for('deleteItem', item_id=item.id)}}">Delete
                     </a>
                     {% endif %}
                 </li>

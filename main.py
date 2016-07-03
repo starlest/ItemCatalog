@@ -90,7 +90,6 @@ def gconnect():
     if result['issued_to'] != CLIENT_ID:
         response = make_response(
             json.dumps("Token's client ID does not match app's."), 401)
-        print "Token's client ID does not match app's."
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -131,7 +130,6 @@ def gconnect():
     output += login_session['picture']
     output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
     flash("you are now logged in as %s" % login_session['username'])
-    print "done!"
     return output
 
 
@@ -259,7 +257,7 @@ def editItem(item_id):
 
     if edit_item.user_id != current_logged_in_user_id:
         flash('You are not authorised to perform this action!')
-        return
+        return redirect('/')
 
     if request.method == 'POST':
         edit_item.name = request.form['name']
@@ -277,6 +275,27 @@ def editItem(item_id):
                                item=edit_item)
 
 
+@app.route("/catalog/item/<int:item_id>/delete")
+def deleteItem(item_id):
+    """
+    Handles the deletion of an item
+    """
+    if 'username' not in login_session:
+        return redirect('/login')
+
+    current_logged_in_user_id = getUserID(login_session.get('email'))
+    delete_item = session.query(Item).filter_by(id=item_id).first()
+
+    if delete_item.user_id != current_logged_in_user_id:
+        flash('You are not authorised to perform this action!')
+        return redirect('/')
+
+    session.delete(delete_item)
+    session.commit()
+    flash('Item %s Successfully Deleted' % delete_item.name)
+    return redirect('/')
+
+
 @app.route('/catalog/<int:category_id>/items')
 def showCategoryItems(category_id):
     """"
@@ -288,7 +307,6 @@ def showCategoryItems(category_id):
         "name").all()
     category = session.query(Category).filter_by(id=category_id).first()
     current_logged_in_user_id = getUserID(login_session.get('email'))
-    print category_items, "test"
     return render_template("categoryitems.html",
                            categories=categories, category=category,
                            category_items=category_items,
