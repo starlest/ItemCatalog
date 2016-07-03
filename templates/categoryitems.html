@@ -1,22 +1,39 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-6">
-        <ul class="list-unstyled">
-            <li>Item 1</li>
-            <li>Item 2</li>
-            <li>Item 3</li>
-            <li>Item 4</li>
-        </ul>
-    </div>
-    <div class="col-md-6">
-        <ul class="list-unstyled">
-            <li>Item 1</li>
-            <li>Item 2</li>
-            <li>Item 3</li>
-            <li>Item 4</li>
-        </ul>
+{% include "header.html" %}
+<div class="container-fluid content">
+    <div class="row">
+        <div class="col-sm-3 categories">
+            <h2>Categories</h2>
+            <ul class="list-unstyled">
+                {% for category in categories %}
+                <li>
+                    <a
+                            href="{{url_for('showCategoryItems', category_id=category.id)}}">
+                        {{category.name}}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="col-sm-9 latest-items">
+            <h2>{{ category.name }} Items</h2>
+            <ul class="items-list list-unstyled">
+                {% for item in category_items %}
+                <li>
+                    <a
+                            href="{{url_for('showItem', item_id=item.id)}}">
+                        {{item.name}}</a>
+                    {% if item.user_id == current_logged_in_user_id %}
+                    <a class="btn btn-sm btn-default"
+                            href="/catalog">Delete
+                    </a>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 </div>
 {% endblock %}

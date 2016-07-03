@@ -1,9 +1,7 @@
 body {
     background-color: gray;
-}
-
-#navcol-1 {
-
+    width: 80vw;
+    margin: 0 auto;
 }
 
 .content {
@@ -18,4 +16,69 @@ body {
 
 .categories {
     background-color: lightblue;
+}
+
+.categories li {
+    font-weight: bold;
+}
+
+.latest-items li {
+    font-weight: bold;
+}
+
+h2 {
+    padding: 0 20px;
+}
+
+label {
+    margin-top: 20px;
+}
+
+input, select {
+    display: block;
+}
+
+input[type=submit] {
+    margin: 20px 0;
+}
+
+p {
+    padding: 0 20px;
+    font-style: italic;
+}
+
+.latest-items li {
+    margin-bottom: 20px;
+}
+
+.row.is-flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.row.is-flex > [class*='col-'] {
+    display: flex;
+    flex-direction: column;
+}
+
+.row.is-flex {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.row.is-flex > [class*='col-'] {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
 }

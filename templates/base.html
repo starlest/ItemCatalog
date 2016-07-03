@@ -5,68 +5,18 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Catalog</title>
-        <link rel="stylesheet" href="../static/css/bootstrap.min.css">
-        <link rel="stylesheet" href="../static/css/styles.css">
-    </head>
-
-    <body>
-        <div class="container">
-
-            <div class="row">
-                <nav class="col-md-12 navbar navbar-default">
-
-                    <div class="navbar-header"><a
-                            class="navbar-brand navbar-link glyphicon glyphicon-home"
-                            href="/catalog"></a>
-                        <button class="navbar-toggle collapsed"
-                                data-toggle="collapse"
-                                data-target="#navcol-1">
-                            <span class="sr-only">
-                                Toggle navigation
-                            </span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                    </div>
-
-                    <div class="collapse navbar-collapse" id="navcol-1">
-                        <ul class="nav navbar-nav navbar-right">
-
-                            {% if not current_logged_in_username %}
-                            <li>
-                                <a href="/login"><span
-                                        class="glyphicon glyphicon-log-in"></span>
-                                    Login</a>
-                            </li>
-                            {% else %}
-                            <li>
-                                <a href="#"><span
-                                        class="glyphicon glyphicon-plus"></span>
-                                    Add Item</a>
-                            </li>
-                            <li>
-                                <a href="/logout"><span
-                                        class="glyphicon glyphicon-log-out"></span>
-                                    Logout</a>
-                            </li>
-                            {% endif %}
-
-                        </ul>
-                    </div>
-
-                </nav>
-            </div>
-        </div>
-
-        <div class="container content">
-            {% block content %}
-            {% endblock %}
-        </div>
-
+        <link rel="stylesheet"
+              href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+        <link rel="stylesheet"
+              href="{{ url_for('static', filename='css/styles.css') }}">
         <script src="../static/js/jquery.min.js"></script>
         <script src="../static/js/bootstrap.min.js"></script>
         <script src="//apis.google.com/js/platform.js?onload=start"></script>
+    </head>
+
+    <body>
+        {% block content %}
+        {% endblock %}
     </body>
 
 </html>

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% include "header.html" %}
+<div class="container-fluid content">
+    <div class="row">
+        <h2>New Item</h2>
+    </div>
+    <form method="POST">
+        <label for="name">Title</label>
+        <input type="text" id="name" name="name">
+        <label for="description">Description</label>
+        <input type="text" id="description" name="description">
+        <label for="category">Category</label>
+        <select id="category" name="category_id">
+            {% for category in categories %}
+            <option value="{{category.id}}">{{category.name}}</option>
+            {% endfor %}
+        </select>
+        <input class="btn btn-primary" type="submit" value="submit">
+    </form>
+</div>
+{% endblock %}

@@ -10,7 +10,7 @@ from oauth2client.client import FlowExchangeError
 from oauth2client.client import flow_from_clientsecrets
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Category, Item, User
+from database_setup import Base, Category, Item, Person
 
 app = Flask(__name__)
 
@@ -32,7 +32,7 @@ def showLogin():
     Show the loging page
     """
     if 'username' in login_session:
-        return redirect(url_for('showCataglog'))
+        return redirect(url_for('showCatalog'))
 
     # Create anti-forgery state token
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
@@ -117,7 +117,6 @@ def gconnect():
     login_session['username'] = data['name']
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
-
     # See if a user exists, if it doesn't make a new one
     user_id = getUserID(login_session['email'])
     if not user_id:
@@ -141,12 +140,10 @@ def logout():
     """
     Log out of current session
     """
-    if "facebook_id" in login_session:
-        pass
-    elif "gplus_id" in login_session:
+    if "gplus_id" in login_session:
         return redirect(url_for('gdisconnect'))
     else:
-        return redirect(url_for('showCataglog'))
+        return redirect(url_for('showCatalog'))
 
 
 @app.route('/logout/google')
@@ -188,23 +185,24 @@ def createUser(current_login_session):
     :param current_login_session:
     :return: new user's id
     """
-    new_user = User(name=login_session['username'], email=current_login_session[
-        'email'], picture=login_session['picture'])
+    new_user = Person(name=current_login_session['username'],
+                      email=current_login_session[
+                          'email'], picture=current_login_session['picture'])
     session.add(new_user)
     session.commit()
-    user = session.query(User).filter_by(
+    user = session.query(Person).filter_by(
         email=current_login_session['email']).one()
     return user.id
 
 
 def getUserInfo(user_id):
-    user = session.query(User).filter_by(id=user_id).one()
+    user = session.query(Person).filter_by(id=user_id).one()
     return user
 
 
 def getUserID(email):
     try:
-        user = session.query(User).filter_by(email=email).one()
+        user = session.query(Person).filter_by(email=email).one()
         return user.id
     except:
         return None
@@ -212,19 +210,40 @@ def getUserID(email):
 
 @app.route("/")
 @app.route("/catalog/")
-def showCataglog():
+def showCatalog():
     """
     Show the main page
     """
     categories = session.query(Category).all()
     latest_items = session.query(Item).order_by("created_at").limit(10)
 
-    current_logged_in_username = ''
-    if 'username' in login_session:
-        current_logged_in_username = login_session['username']
+    current_logged_in_user_id = getUserID(login_session.get('email'))
     return render_template("catalog.html", categories=categories,
                            latest_items=latest_items,
-                           current_logged_in_username=current_logged_in_username)
+                           current_logged_in_user_id=current_logged_in_user_id)
+
+
+@app.route('/item/new/', methods=['GET', 'POST'])
+def newItem():
+    """
+    Handles the creation of new item
+    """
+    if 'username' not in login_session:
+        return redirect('/login')
+    current_logged_in_user_id = getUserID(login_session.get('email'))
+    if request.method == 'POST':
+        new_item = Item(name=request.form['name'],
+                        description=request.form['description'],
+                        category_id=request.form[
+                            'category_id'], user_id=current_logged_in_user_id)
+        session.add(new_item)
+        flash('New Item %s Successfully Created' % new_item.name)
+        session.commit()
+        return redirect(url_for('showCatalog'))
+    else:
+        categories = session.query(Category).all()
+        return render_template('newitem.html', categories=categories,
+                               current_logged_in_user_id=current_logged_in_user_id)
 
 
 @app.route('/catalog/<int:category_id>/items')
@@ -232,7 +251,29 @@ def showCategoryItems(category_id):
     """"
     Show the selected category's items
     """
-    return render_template("categoryitems.html")
+    categories = session.query(Category).all()
+    category_items = session.query(Item).filter_by(
+        category_id=category_id).order_by(
+        "name").all()
+    category = session.query(Category).filter_by(id=category_id).first()
+    current_logged_in_user_id = getUserID(login_session.get('email'))
+    print category_items, "test"
+    return render_template("categoryitems.html",
+                           categories=categories, category=category,
+                           category_items=category_items,
+                           current_logged_in_user_id=current_logged_in_user_id)
+
+
+@app.route("/catalog/item/<int:item_id>")
+def showItem(item_id):
+    """
+    Show the item page
+    """
+    item = session.query(Item).filter_by(id=item_id).first()
+    current_logged_in_user_id = getUserID(login_session.get('email'))
+
+    return render_template("item.html", item=item,
+                           current_logged_in_user_id=current_logged_in_user_id)
 
 
 if __name__ == "__main__":

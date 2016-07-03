@@ -7,8 +7,8 @@ from sqlalchemy import create_engine
 Base = declarative_base()
 
 
-class User(Base):
-    __tablename__ = 'user'
+class Person(Base):
+    __tablename__ = 'person'
 
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
@@ -40,15 +40,16 @@ class Item(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
+    description = Column(String(250), nullable=False)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     category_id = Column(Integer, ForeignKey('category.id'))
     category = relationship(Category, backref=backref("items",
                                                       cascade="all, "
                                                               "delete-orphan"))
-    user_id = Column(Integer, ForeignKey('user.id'))
-    user = relationship(User, backref=backref("items",
-                                              cascade="all, "
-                                                      "delete-orphan"))
+    user_id = Column(Integer, ForeignKey('person.id'))
+    user = relationship(Person, backref=backref("items",
+                                                cascade="all, "
+                                                        "delete-orphan"))
 
     @property
     def serialize(self):
